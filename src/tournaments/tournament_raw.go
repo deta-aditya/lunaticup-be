@@ -2,16 +2,22 @@ package tournaments
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 )
 
 var (
+	MethodSingleElim          = "SINGLE_ELIM"
+	MethodPrelimArrangedGroup = "PRELIM_ARRANGED_GROUP"
+
 	ErrInvalidName    = errors.New("name should not be empty")
 	ErrInvalidPlayers = errors.New("tournament should contain at least 2 players")
+	ErrInvalidMethod  = fmt.Errorf("method should be either %s or %s with appropriate config", MethodSingleElim, MethodPrelimArrangedGroup)
 
 	errMap = map[string]error{
 		"IsNameValid":    ErrInvalidName,
 		"IsPlayersValid": ErrInvalidPlayers,
+		"IsMethodValid":  ErrInvalidMethod,
 	}
 )
 
@@ -41,4 +47,34 @@ func (tr TournamentRaw) IsNameValid() bool {
 
 func (tr TournamentRaw) IsPlayersValid() bool {
 	return len(tr.Players) >= 2
+}
+
+func (tr TournamentRaw) IsMethodValid() (valid bool) {
+	if tr.Method == MethodSingleElim {
+		valid = true
+	}
+
+	if tr.Method == MethodPrelimArrangedGroup {
+		conf, ok := tr.MethodConfig.(map[string]interface{})
+		if !ok {
+			return
+		}
+
+		ppgRaw, ok := conf["players_per_group"]
+		if !ok {
+			return
+		}
+
+		ppg, ok := ppgRaw.(int)
+		if !ok {
+			return
+		}
+
+		ppgAboveMin := ppg >= 3
+		ppgBeMultipleOfPlayersCount := len(tr.Players)%ppg == 0
+
+		valid = ppgAboveMin && ppgBeMultipleOfPlayersCount
+	}
+
+	return
 }
