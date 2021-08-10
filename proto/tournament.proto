@@ -1,0 +1,37 @@
+syntax = "proto3";
+package proto;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "src/grpc";
+
+message SingleElimination {};
+message PreliminationArrangedGroup {
+  uint32 playersPerGroup = 1;
+  string code = 2; 
+};
+
+message TournamentRaw {
+  string name = 1;
+  oneof method {
+    SingleElimination singleElimination = 2;
+    PreliminationArrangedGroup preliminationArrangedGroup = 3;
+  }
+  repeated string players = 4;
+}
+
+message Tournament {
+  string id = 1;
+  string name = 2;
+  oneof method {
+    SingleElimination singleElimination = 3;
+    PreliminationArrangedGroup preliminationArrangedGroup = 4;
+  }
+  repeated string players = 5;
+  string code = 6;
+  google.protobuf.Timestamp createdAt = 7;
+}
+
+service TournamentService {
+  rpc CreateTournament(TournamentRaw) returns (Tournament) {}
+}
