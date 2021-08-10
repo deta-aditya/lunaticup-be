@@ -26,10 +26,21 @@ func TestHandleCreate(t *testing.T) {
 				},
 			},
 			expect: func(rr *httptest.ResponseRecorder, rb map[string]interface{}) {
-				if status := rr.Result().StatusCode; status != http.StatusOK {
-					t.Errorf("wrong status code: got %v want %v", status, http.StatusOK)
-				}
-
+				expectStatusCode(t, rr, http.StatusOK)
+			},
+		},
+		{
+			name: "it should respond with error when body is invalid",
+			body: map[string]interface{}{
+				"name":          "",
+				"method":        "SINGLE_ELIM",
+				"method_config": nil,
+				"players": []string{
+					"Player 1",
+				},
+			},
+			expect: func(rr *httptest.ResponseRecorder, rb map[string]interface{}) {
+				expectStatusCode(t, rr, http.StatusBadRequest)
 			},
 		},
 	}
@@ -57,5 +68,11 @@ func TestHandleCreate(t *testing.T) {
 
 			tt.expect(rr, rb)
 		})
+	}
+}
+
+func expectStatusCode(t *testing.T, rr *httptest.ResponseRecorder, code int) {
+	if status := rr.Result().StatusCode; status != code {
+		t.Errorf("wrong status code: got %v want %v", status, code)
 	}
 }
