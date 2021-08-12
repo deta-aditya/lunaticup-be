@@ -1,6 +1,6 @@
 package main
 
-import "example.com/lunaticup-be/src"
+import "github.com/deta-aditya/lunaticup-be/src"
 
 func main() {
 	src.RunServer()

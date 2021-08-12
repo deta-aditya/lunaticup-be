@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"example.com/lunaticup-be/src/tournaments"
+	"github.com/deta-aditya/lunaticup-be/src/tournaments"
 	"github.com/gorilla/mux"
 )
 

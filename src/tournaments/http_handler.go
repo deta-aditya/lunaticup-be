@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	httpUtils "example.com/lunaticup-be/src/http"
+	httpUtils "github.com/deta-aditya/lunaticup-be/src/http"
 )
 
 func HandleCreate(rw http.ResponseWriter, r *http.Request) {
