@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/deta-aditya/lunaticup-be/src/tournaments"
 	"github.com/gorilla/mux"
@@ -24,6 +25,8 @@ func RunServer() {
 
 	r.HandleFunc("/tournaments", tournaments.HandleCreate).Methods("POST")
 
-	log.Println("[Server] HTTP is served in :8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	port := os.Getenv("PORT")
+
+	log.Println("[Server] HTTP is served in :" + port)
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
