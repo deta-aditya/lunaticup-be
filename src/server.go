@@ -15,7 +15,7 @@ type Tournament struct {
 	Players []string `json:"players"`
 }
 
-func Run() {
+func RunServer() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
@@ -24,19 +24,6 @@ func Run() {
 
 	r.HandleFunc("/tournaments", tournaments.HandleCreate).Methods("POST")
 
-	// http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
-	// 	fmt.Fprintf(rw, "Lunaticup API")
-	// })
-
-	// http.HandleFunc("/tournaments", func(rw http.ResponseWriter, r *http.Request) {
-	// 	tournamentsJSON := []Tournament{
-	// 		{Name: "The Slumber Cup", Method: "Single Elimination", Players: []string{"BunnySlice", "StupidFern", "Imbechole"}},
-	// 		{Name: "Naruto Summer Cup", Method: "Single Elimination", Players: []string{"Benny", "Bensos", "Brian", "Baba"}},
-	// 	}
-
-	// 	rw.Header().Set("Content-Type", "application/json")
-	// 	json.NewEncoder(rw).Encode(tournamentsJSON)
-	// })
-
+	log.Println("[Server] HTTP is served in :8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
